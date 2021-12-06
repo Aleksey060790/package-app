@@ -7,6 +7,13 @@ async function get(url) {
   return result;
 }
 
-export default function getPackages() {
+export default async function getAdditional(packageName) {
+  const responseSecond = await fetch(`https://data.jsdelivr.com/v1/package/npm/${packageName}/stats`);
+  const resultSecond = await responseSecond.json();
+
+  return resultSecond;
+}
+
+export function getPackages() {
   return get('/packages');
 }

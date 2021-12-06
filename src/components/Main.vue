@@ -13,16 +13,25 @@
           class="PostsList__item"
           v-for="item of packages"
           :key="item.hits"
+          v-on:click='itemClick(item)'
         >
           <div><b>type:</b>  {{ item.type }}</div>
           <div><b>name:</b>  {{ item.name }}</div>
           <div><b>hits:</b>  {{ item.hits }}</div>
+
           <button
             type="button"
-            class="PostsList__button button"
+            class="btn"
+            @click="showModal($event)"
           >
-            Close/Open
+            Open Modal!
           </button>
+
+          <Modal
+            v-show="isModalVisible"
+            @close="closeModal"
+            :data="modalData"
+          />
         </li>
       </ul>
     </div>
@@ -30,10 +39,38 @@
 </template>
 
 <script>
+import getAdditional from '../api/packages';
+// eslint-disable-next-line import/extensions
+import Modal from './Modal';
+
 export default {
   name: 'Main',
   props: {
     packages: Array,
+    stats: Object,
+    additionalData: Object,
+  },
+  methods: {
+    itemClick(item) {
+      console.log(item.name);
+    },
+    showModal($event) {
+      this.isModalVisible = true;
+      this.additionalData = getAdditional($event);
+      console.log($event);
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+  },
+  components: {
+    Modal,
+  },
+  data() {
+    return {
+      isModalVisible: false,
+      modalData: null,
+    };
   },
 };
 </script>

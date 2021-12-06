@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <Header />
-    <Main v-bind:packages="packages" />
+    <Main
+      v-bind:packages="packages"
+      v-bind:stats="stats"
+    />
     <Footer />
   </div>
 </template>
@@ -11,12 +14,14 @@
 import Header from '@/components/Header.vue';
 import Main from '@/components/Main.vue';
 import Footer from '@/components/Footer.vue';
-import getPackages from '@/api/packages';
+import getStats, { getPackages } from '@/api/packages';
 
 export default {
   data() {
     return {
+      pageNumber: 0,
       packages: [],
+      stats: [],
     };
   },
   name: 'Home',
@@ -27,6 +32,8 @@ export default {
   },
   async mounted() {
     this.packages = await getPackages();
+    this.stats = await getStats();
+    console.log(this.stats);
   },
 };
 </script>
